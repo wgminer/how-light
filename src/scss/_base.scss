@@ -11,3 +11,88 @@ body {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 100%;
 }
+
+.input {
+
+	.container {
+		display: flex;
+		width: 800px;
+		margin: 0 auto;
+		padding: 3rem 0;
+	}
+}
+
+.row {
+	// background-color: red;
+	min-height: calc(100vh - 156px);
+	width: 800px;
+	padding: 0 1rem;
+	margin: 0 auto;
+	line-height: 1.4;
+
+	p {
+		column-count: 2;
+	}
+
+	h1 {
+		text-align: center;
+		margin: 4rem 0 0;
+		font-size: 8rem;
+		letter-spacing: -.25rem;
+	}
+}
+
+.col {
+	width: 50%;
+	padding: 0 1rem;
+}
+
+.form-group {
+	background-color: #fff;
+	width: 100%;
+	position: relative;
+	padding: 0 1rem;
+
+	label {
+		display: block;
+		font-size: 10px;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		font-weight: bold;
+		position: absolute;
+		z-index: 2;
+		left: 2rem;
+		cursor: pointer;
+		top: .5rem;
+	}
+
+	input {
+		border: $border;
+		font-family: "menlo", "consolas", monospace;
+		padding: 2rem 1rem .5rem;
+		display: block;
+		width: 100%;
+		z-index: 1;
+		position: relative;
+		margin: 0;
+
+		&:hover {
+			border: 1px solid #999;
+		}
+
+		&:focus {
+			outline: none;
+			border: 1px solid blue;
+		}
+	}
+}
+
+.ratio {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: bold;
+	white-space: nowrap;
+}

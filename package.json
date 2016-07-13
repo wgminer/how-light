@@ -1,5 +1,5 @@
 {
-  "name": "workbench",
+  "name": "how-light",
   "version": "1.0.0",
   "description": "Collaborative markdown editing",
   "main": "index.js",
@@ -11,7 +11,7 @@
   "author": "William Miner <wgminer@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "angular": "^1.5.6",
+    "angular": "^1.5.7",
     "autoprefixer": "^6.1.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",

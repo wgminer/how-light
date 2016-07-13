@@ -74,7 +74,7 @@ gulp.task('js', () => {
 
     const scripts = [
         './node_modules/jquery/dist/jquery.js',
-        './node_modules/lodash/lodash.js',
+        './node_modules/angular/angular.js',
         './src/js/*.js'
     ];
 

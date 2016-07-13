@@ -1,23 +1,32 @@
 doctype html
-html(lang="en")
+html(lang="en", ng-app="howlight")
     head
         meta(charset="utf-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         link(rel="shortcut icon", type="image/x-icon", href="favicon.ico")
         title How Light
-        link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Space+Mono:400,700")
+        //- link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Space+Mono:400,700")
         link(rel="stylesheet", href="css/how-light.css")
-    body
-        .aside
-            h1 How Light?
-            .row
+    body(ng-controller="AppCtrl")
+        .input
+            .container
                 .form-group
                     label(for="background-color") Background Color
-                    input(id="background-color", type="text", value="#ffffff")
+                    input(id="background-color", type="text", ng-model="calc.background", ng-change="compute()")
                 .form-group
                     label(for="text-color") Text Color
-                    input(id="text-color", type="text", value="#000000")
-        .preview
-            h2#text-val 
-            p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, incidunt illum quasi, tenetur dolorem dignissimos culpa ex, et in ducimus commodi omnis praesentium tempore itaque dicta! Incidunt libero, pariatur vitae?
+                    input(id="text-color", type="text", ng-model="calc.text", ng-change="compute()")
+        .input
+            .container
+                .form-group
+                    label(for="background-color") Background Color
+                    input(id="background-color", type="text", ng-model="calc.background", ng-change="compute()")
+                .form-group
+                    label(for="text-color") Text Color
+                    input(id="text-color", type="text", ng-model="calc.text", ng-change="compute()")
+
+        .output(style="background-color: {{ calc.background }};")
+            .row
+                h1(style="color: {{ calc.lightest }};") {{ calc.lightest }}
+
         script(src="js/how-light.js")
