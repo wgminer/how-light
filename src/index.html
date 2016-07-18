@@ -3,12 +3,16 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <title>How Light</title>
         <link rel="stylesheet" href="css/how-light.css">
+        <style>
+            @charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}
+        </style>
     </head>
     <body ng-controller="AppCtrl">
-        <main>
+        <main ng-cloak>
             <p>Want to know how light can you make your text and still be <a href="https://www.w3.org/TR/WCAG20/">WCAG 2.0</a> Compliant?</p>
             <p>Well, if the background color is <input type="text" ng-model="input.background" ng-change="compute()" maxlength="7">, the text color is <input type="text" ng-model="input.text" ng-change="compute()" maxlength="7">, the font size is <input type="text" class="small" ng-model="input.size" ng-change="compute()"> pixels, and the font weight <select ng-model="input.isBold" ng-options="obj.value as obj.text for obj in isBoldArray"></select> bold.</p>
 

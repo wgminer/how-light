@@ -239,32 +239,3 @@ app.service('Color', function ($q, $http, $rootScope) {
     return module;
 
 });
-
-// $(function () {
-
-//     var $background = $('#background-color');
-//     var $text = $('#text-color');
-
-//     var backgroundVal = $background.val();
-//     var textVal = $text.val();
-
-//     $('.preview')[0].style.backgroundColor = backgroundVal;
-//     $('#text-val').text(textVal + ' --> ' + textVal);
-
-//     // Should try and find the lightest text color possible
-//     $text.on('change paste keyup', function () {
-
-//         textVal = $text.val();
-
-//         if (textVal.length < 7) {
-//             return false;
-//         }
-    
-//         var lightestVal = lightestColor(backgroundVal, textVal);
-//         $('.preview')[0].style.color = lightestVal;
-
-//         $('#text-val').text(textVal + ' --> ' + lightestVal);
-
-//     });
-
-// });
