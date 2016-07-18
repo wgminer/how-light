@@ -37,25 +37,10 @@ gulp.task('fonts', () => {
         .pipe(gulp.dest('./public/fonts'));
 });
 
-gulp.task('jade', () => {
-
-    const pages = [
-        './src/**/*.jade',
-        '!./src/includes/**/*.jade'
-    ];
-
-    return gulp.src(pages)
-        .pipe(jade({
-            pretty: true
-        }))
-        .on('error', function (err) {
-            gutil.log(gutil.colors.red(err));
-            gutil.beep();
-            this.emit('end');
-        })
+gulp.task('html', () => {
+    return gulp.src('./src/**/*.html')
         .pipe(gulp.dest('./public'));
 });
-
 
 gulp.task('scss', () => {
 
@@ -120,14 +105,14 @@ gulp.task('browser-sync', ['nodemon'], () => {
 
 
 gulp.task('build', cb => {
-    return runSequence('clean', 'icons', 'fonts', ['jade', 'scss', 'js'], cb);
+    return runSequence('clean', 'icons', 'fonts', ['html', 'scss', 'js'], cb);
 });
 
 gulp.task('watch', () => {
      gulp.watch('scss/**/*.scss', {cwd: './src'}, ['scss']);
      gulp.watch('harmony/**/*.scss', {cwd: './node_modules'}, ['scss']);
      gulp.watch('js/**/*.js', {cwd: './src'}, ['js']);
-     gulp.watch('**/*.jade', {cwd: './src'}, ['jade']);
+     gulp.watch('**/*.html', {cwd: './src'}, ['html']);
 });
 
 gulp.task('serve', cb => {

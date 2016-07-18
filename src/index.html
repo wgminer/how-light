@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="howlight">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+        <title>How Light</title>
+        <link rel="stylesheet" href="css/how-light.css">
+    </head>
+    <body ng-controller="AppCtrl">
+        <main>
+            <p>Want to know how light can you make your text and still be <a href="https://www.w3.org/TR/WCAG20/">WCAG 2.0</a> Compliant?</p>
+            <p>Well, if the background color is <input type="text" ng-model="input.background" ng-change="compute()" maxlength="7">, the text color is <input type="text" ng-model="input.text" ng-change="compute()" maxlength="7">, the font size is <input type="text" class="small" ng-model="input.size" ng-change="compute()"> pixels, and the font weight <select ng-model="input.isBold" ng-options="obj.value as obj.text for obj in isBoldArray"></select> bold.</p>
+
+            <p ng-show="output">This combination has a contrast ratio of <span class="code">{{ output.ratio }}:1</span> and 
+                <span ng-show="wcag() == false" class="red">is not AA or AAA Compliant.</span>
+                <span ng-show="wcag() == 'AAA'" class="green">is AA and AAA Compliant.</span>
+                <span ng-show="wcag() == 'AA'"><span class="green">is AA compliant</span> but <span class="red">is not AAA Compliant.</span></span>
+            </p>
+            <p ng-show="output.ratio >= 4.5">Given the background color of <span class="code">{{ input.background }}</span>, the lightest text color you can use to remain AA Compliant is <span class="code">{{ output.lightest }}</span>.</p>
+            <p ng-show="output.ratio >= 4.5">Alternatively, you can keep the text color of <span class="code">{{ input.text }}</span> and darken the background to <span class="code">{{ output.darkest }}</span> and still remain compliant.</p>
+        </main>
+        <!-- <pre><code>{{ input | json }}</code></pre> -->
+        <script src="js/how-light.js"></script>
+    </body>
+</html>

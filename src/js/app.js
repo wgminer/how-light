@@ -4,32 +4,94 @@ var app = angular.module('howlight', []);
 
 app.controller('AppCtrl', function ($scope, $rootScope, $timeout, Color) {
 
-    $scope.calc = {
-        text: '#000000',
-        background: '#ffffff',
-        ratio: Color.ratio('#ffffff', '#000000'),
-        lightest: Color.lightest('#ffffff', '#000000'),
-        lightestRatio: Color.ratio('#ffffff', Color.lightest('#ffffff', '#000000'))
+    $scope.input = {
+        background: '#FFF',
+        text: '#000',
+        size: 10,
+        isBold: false
     };
+
+    $scope.isBoldArray = [
+        { text: 'is', value: true }, 
+        { text: 'is not', value: false }
+    ];
+
+    $scope.output = false;
 
     $scope.compute = function () {
 
-        if ($scope.calc.background.length > 1 && $scope.calc.background[0] != '#') {
-            $scope.calc.background = '#' + $scope.calc.background;
+        if (typeof $scope.input.background == 'undefined' || typeof $scope.input.text == 'undefined' || isNaN(parseInt($scope.input.size))) {
+            return false;
         }
 
-        var isValidColor = function (str) {
+        // Add # to front of background color
+        if ($scope.input.background.length > 1 && $scope.input.background[0] != '#') {
+            $scope.input.background = '#' + $scope.input.background;
+        }
+
+        // Add # to front of text color
+        if ($scope.input.text.length > 1 && $scope.input.text[0] != '#') {
+            $scope.input.text = '#' + $scope.input.text;
+        }
+
+        function isValidColor(str) {
             return /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(str);
         }
 
-        console.log(isValidColor($scope.calc.background), isValidColor($scope.calc.text));
-
-        if (isValidColor($scope.calc.background) && isValidColor($scope.calc.text)) {
-            $scope.calc.ratio = Color.ratio($scope.calc.background, $scope.calc.text);
-            $scope.calc.lightest = Color.lightest($scope.calc.background, $scope.calc.text);
-            $scope.calc.lightestRatio = Color.ratio($scope.calc.background, Color.lightest($scope.calc.background, $scope.calc.text));
+        if (!isValidColor($scope.input.background) || !isValidColor($scope.input.text)) {
+            $scope.output = false;
+            return false;
         }
+
+        $scope.output = {
+            ratio: Color.ratio($scope.input.background, $scope.input.text),
+            lightest: Color.lightest($scope.input.background, $scope.input.text),
+            darkest: Color.darkest($scope.input.text, $scope.input.background),
+        }
+
+        //     $scope.calc.ratio = Color.ratio($scope.calc.background, $scope.calc.text);
+        //     $scope.calc.lightest = Color.lightest($scope.calc.background, $scope.calc.text);
+        //     $scope.calc.lightestRatio = Color.ratio($scope.calc.background, Color.lightest($scope.calc.background, $scope.calc.text));
+        // }
     };
+
+    $scope.wcag = function () {
+
+        var bold = $scope.input.isBold;
+        var ratio = parseInt($scope.output.ratio);
+        var size = parseInt($scope.input.size);
+        var large = false;
+
+        if (bold && size >= 18.66) {
+            large = true;
+        } else if (size >= 24) {
+            large = true;
+        } else {
+            large = false;
+        }
+
+        console.log(ratio);
+
+        if (large) {
+            if (ratio < 3) {
+                return false;
+            } else if (ratio >= 3 && ratio < 4.5) {
+                return 'AA';
+            } else {
+                return 'AAA';
+            }
+        } else {
+            if (ratio < 4.5) {
+                return false;
+            } else if (ratio >= 4.5 && ratio < 7) {
+                return 'AA';
+            } else {
+                return 'AAA';
+            }
+        }
+    }
+
+    $scope.compute();
 
 });
 
@@ -136,42 +198,42 @@ app.service('Color', function ($q, $http, $rootScope) {
       
     }
 
-    module.lightest = function (bg, text) {
+    module.lightest = function (fixedColor, lightenColor) {
 
-        bg = parseHex(bg);
-        text = parseHex(text);
-
-        console.log(text);
+        fixedColor = parseHex(fixedColor);
+        lightenColor = parseHex(lightenColor);
 
         var colorArray = [];
         var i = 1;
 
-        // Darken text
-        if (module.ratio(bg, text) <= 4.5) { 
+        do {
+            lightenColor = module.lighten(lightenColor, i);
+            colorArray.unshift(lightenColor);
+            // console.log(i, lightenColor);
+            i+=.001;
+        } while (module.ratio(fixedColor, lightenColor) >= 4.5 && i < 10);
 
-            do {
-                text = module.lighten(text, i);
-                colorArray.unshift(text);
-                console.log(i, text);
-                i-=.01;
-            } while (module.ratio(bg, text) <= 4.5 && i > -10);
+        return colorArray[1];        
+    }
 
-            return colorArray[0];
-
-        // Lighten text
-        } else { 
-
-            do {
-                text = module.lighten(text, i);
-                colorArray.unshift(text);
-                console.log(i, text);
-                i+=.01;
-            } while (module.ratio(bg, text) >= 4.5 && i < 10);
-
-            return colorArray[1];
-
-        }
+    module.darkest = function (fixedColor, darkenColor) {
         
+        fixedColor = parseHex(fixedColor);
+        darkenColor = parseHex(darkenColor);
+
+        var colorArray = [];
+        var i = 1;
+
+        console.log('y');
+
+        do {
+            darkenColor = module.lighten(darkenColor, i);
+            colorArray.unshift(darkenColor);
+            console.log(i, darkenColor);
+            i-=.001;
+        } while (module.ratio(fixedColor, darkenColor) >= 4.5 && i > -10);
+
+        return colorArray[0];
     }
 
     return module;
