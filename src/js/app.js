@@ -210,7 +210,7 @@ app.service('Color', function ($q, $http, $rootScope) {
             lightenColor = module.lighten(lightenColor, i);
             colorArray.unshift(lightenColor);
             // console.log(i, lightenColor);
-            i+=.001;
+            i+=.005;
         } while (module.ratio(fixedColor, lightenColor) >= 4.5 && i < 10);
 
         return colorArray[1];        
@@ -230,7 +230,7 @@ app.service('Color', function ($q, $http, $rootScope) {
             darkenColor = module.lighten(darkenColor, i);
             colorArray.unshift(darkenColor);
             console.log(i, darkenColor);
-            i-=.001;
+            i-=.005;
         } while (module.ratio(fixedColor, darkenColor) >= 4.5 && i > -10);
 
         return colorArray[0];
