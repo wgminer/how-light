@@ -2,7 +2,7 @@
 
 var app = angular.module('howlight', []);
 
-app.controller('AppCtrl', function ($scope, $rootScope, $timeout, Color) {
+app.controller('AppCtrl', function ($scope, Color) {
 
     $scope.input = {
         background: '#FFF',
@@ -58,7 +58,7 @@ app.controller('AppCtrl', function ($scope, $rootScope, $timeout, Color) {
     $scope.wcag = function () {
 
         var bold = $scope.input.isBold;
-        var ratio = parseInt($scope.output.ratio);
+        var ratio = $scope.output.ratio;
         var size = parseInt($scope.input.size);
         var large = false;
 
@@ -70,7 +70,7 @@ app.controller('AppCtrl', function ($scope, $rootScope, $timeout, Color) {
             large = false;
         }
 
-        console.log(ratio);
+        console.log(ratio > 4.5);
 
         if (large) {
             if (ratio < 3) {
@@ -95,7 +95,7 @@ app.controller('AppCtrl', function ($scope, $rootScope, $timeout, Color) {
 
 });
 
-app.service('Color', function ($q, $http, $rootScope) {
+app.service('Color', function ($q, $http) {
 
     const module = {};
 
