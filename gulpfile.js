@@ -58,9 +58,8 @@ gulp.task('scss', () => {
 gulp.task('js', () => {
 
     const scripts = [
-        './node_modules/jquery/dist/jquery.js',
-        './node_modules/angular/angular.js',
-        './src/js/*.js'
+        './src/js/color.js',
+        './src/js/calc.js'
     ];
 
     return gulp.src(scripts)
@@ -70,39 +69,47 @@ gulp.task('js', () => {
         .pipe(gulp.dest('./public/js'));
 });
 
-gulp.task('nodemon', function (cb) {
-    var called = false;
-    return nodemon({
-        script: 'index.js',
-        ignore: [
-            'gulpfile.js',
-            'node_modules/',
-            'public/',
-            'src/'
-        ]
-    })
-    .on('start', function () {
-        if (!called) {
-            called = true;
-            cb();
-        }
-    })
-    .on('restart', function () {
-        setTimeout(function () {
-            browserSync.reload({ stream: false });
-        }, 1000);
-    });
-});
+// gulp.task('nodemon', function (cb) {
+//     var called = false;
+//     return nodemon({
+//         script: 'index.js',
+//         ignore: [
+//             'gulpfile.js',
+//             'node_modules/',
+//             'public/',
+//             'src/'
+//         ]
+//     })
+//     .on('start', function () {
+//         if (!called) {
+//             called = true;
+//             cb();
+//         }
+//     })
+//     .on('restart', function () {
+//         setTimeout(function () {
+//             browserSync.reload({ stream: false });
+//         }, 1000);
+//     });
+// });
 
-gulp.task('browser-sync', ['nodemon'], () => {
+gulp.task('browser-sync', function() {
     browserSync.init(['./public/css/**/*.css', './public/js/**/*.js', './public/**/*.html'], {
-        proxy: 'http://localhost:8080',
-        files: ['public/**/*.*'],
-        browser: 'google chrome',
-        port: 3000,
+        notify: false,
+        server: {
+            baseDir: './public'
+        }
     });
 });
 
+gulp.task('test', function () {
+    gulp.src('./tests/*.js')
+        .pipe(jasmine())
+            .on('error', notify.onError({
+                title: 'Jasmine Test Failed',
+                message: 'One or more tests failed, see the cli for details.'
+            }));
+});
 
 gulp.task('build', cb => {
     return runSequence('clean', 'icons', 'fonts', ['html', 'scss', 'js'], cb);
