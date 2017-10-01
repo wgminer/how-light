@@ -10,19 +10,18 @@
     </head>
     <body>
         <main>
-            <p>Want to know how light can you make your text and still be <a href="https://www.w3.org/TR/WCAG20/">WCAG 2.0</a> Compliant?</p>
+            <p>Want to know how light can you make your text and still be <a href="https://www.w3.org/TR/WCAG20/">WCAG 2.0</a> compliant?</p>
             <p>Well, if the background color is <input id="input-background" type="text" maxlength="7">, the text color is <input id="input-text" type="text" maxlength="7">, the font size is <input id="input-size" type="text" class="small"> pixels, and the font weight <select id="input-bold">
                 <option value="false" selected="true">is not</option>
                 <option value="true">is</option>
             </select> bold.</p>
 
-            <p id="output-result" style="display:none;">This combination has a contrast ratio of <span id="output-ratio" class="code">{{ output.ratio }}:1</span> and 
-                <span id="not-compliant" style="display:none;" class="red">is not AA or AAA Compliant.</span>
-                <span id="aaa-compliant" style="display:none;" class="green">is AA and AAA Compliant.</span>
-                <span id="aa-compliant" style="display:none;"><span class="green">is AA compliant</span> but <span class="red">is not AAA Compliant.</span></span>
-            </p>
-            <p id="output-text" style="display:none;">Given the background color of <span id="input-copy-background" class="code">{{ input.background }}</span>, the lightest text color you can use to remain AA Compliant is <span id="output-lightest" class="code">{{ output.lightest }}</span>.</p>
-            <p id="output-background" style="display:none;">Alternatively, you can keep the text color of <span id="input-copy-text"class="code">{{ input.text }}</span> and darken the background to <span id="output-darkest" class="code">{{ output.darkest }}</span> and still remain compliant.</p>
+            <div id="output-result" style="display:none;">
+                <p id="output-compliance"></p>
+                <p id="output-text"></p>
+                <p id="output-background"></p>
+            </div>
+            
         </main>
         <!-- <pre><code>{{ input | json }}</code></pre> -->
         <script src="js/how-light.js"></script>

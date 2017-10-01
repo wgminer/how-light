@@ -19,22 +19,11 @@ const jade = require('gulp-jade');
 const nodemon = require('gulp-nodemon');
 const browserSync = require('browser-sync').create();
 
-const shell = require('gulp-shell')
-const child = require('child_process');
-
+var ftp = require('vinyl-ftp');
+var secrets = require('./secrets.json');
 
 gulp.task('clean', () => {
     return del('./public/**/*');
-});
-
-gulp.task('icons', () => {
-    return gulp.src('./node_modules/harmony/src/icons/**/*')
-        .pipe(gulp.dest('./public/icons'));
-});
-
-gulp.task('fonts', () => {
-    return gulp.src('./node_modules/ui-fonts/fonts/**/*')
-        .pipe(gulp.dest('./public/fonts'));
 });
 
 gulp.task('html', () => {
@@ -45,8 +34,8 @@ gulp.task('html', () => {
 gulp.task('scss', () => {
 
     const plugins = [
-        require('autoprefixer')
-        // require('cssnano')
+        require('autoprefixer'),
+        require('cssnano')
     ];
     
     return gulp.src(['./src/scss/**/*.scss'])
@@ -69,30 +58,6 @@ gulp.task('js', () => {
         .pipe(gulp.dest('./public/js'));
 });
 
-// gulp.task('nodemon', function (cb) {
-//     var called = false;
-//     return nodemon({
-//         script: 'index.js',
-//         ignore: [
-//             'gulpfile.js',
-//             'node_modules/',
-//             'public/',
-//             'src/'
-//         ]
-//     })
-//     .on('start', function () {
-//         if (!called) {
-//             called = true;
-//             cb();
-//         }
-//     })
-//     .on('restart', function () {
-//         setTimeout(function () {
-//             browserSync.reload({ stream: false });
-//         }, 1000);
-//     });
-// });
-
 gulp.task('browser-sync', function() {
     browserSync.init(['./public/css/**/*.css', './public/js/**/*.js', './public/**/*.html'], {
         notify: false,
@@ -112,7 +77,7 @@ gulp.task('test', function () {
 });
 
 gulp.task('build', cb => {
-    return runSequence('clean', 'icons', 'fonts', ['html', 'scss', 'js'], cb);
+    return runSequence('clean', ['html', 'scss', 'js'], cb);
 });
 
 gulp.task('watch', () => {
@@ -124,4 +89,24 @@ gulp.task('watch', () => {
 
 gulp.task('serve', cb => {
     runSequence('build', ['browser-sync', 'watch'], cb)
+});
+
+gulp.task('deploy', ['build'], function () {
+
+    var conn = ftp.create({
+        host: secrets.production.host,
+        user: secrets.production.user,
+        password: secrets.production.password,
+        parallel: 3,
+        maxConnections: 5,
+        log: gutil.log
+    }); 
+
+    var globs = [
+        './public/**',
+    ]
+
+    return gulp.src('./public/**', {base: './public', buffer: false})
+        .pipe(conn.newer(secrets.production.path))
+        .pipe(conn.dest(secrets.production.path));
 });

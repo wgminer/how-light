@@ -75,7 +75,7 @@ var Calc = (function () {
 
         if (isLargeText) {
             if (ratio < 3) {
-                return false;
+                return 'None';
             } else if (ratio >= 3 && ratio < 4.5) {
                 return 'AA';
             } else {
@@ -83,7 +83,7 @@ var Calc = (function () {
             }
         } else {
             if (ratio < 4.5) {
-                return false;
+                return 'None';
             } else if (ratio >= 4.5 && ratio < 7) {
                 return 'AA';
             } else {
@@ -118,28 +118,23 @@ var Calc = (function () {
         var output = module.colors(background, text, size);   
         var compliance = module.compliance(output.ratio, size, bold);
 
-        console.log(output, compliance);
-
         if (output && compliance) {
-
-            outputs.ratio.innerHTML = output.ratio; 
-            outputs.lightest.innerHTML = output.lightest;     
-            outputs.darkest.innerHTML = output.darkest; 
-
-            copy.background.innerHTML = background;
-            copy.text.innerHTML = text;
-
-            document.getElementById('output-result').style.display = '';
-            document.getElementById('output-text').style.display = '';
-            document.getElementById('output-background').style.display = '';
-
-            if (compliance === false) {
-                document.getElementById('not-compliant').style.display = '';
-            } else if (compliance == 'AA') {
-                document.getElementById('aa-compliant').style.display = '';
-            } else if (compliance == 'AAA') {
-                document.getElementById('aaa-compliant').style.display = '';
+            
+            if (compliance === 'None') {
+                var complianceStr = 'is not AA or AAA compliant.';
+            } else if (compliance === 'AA') {
+                var complianceStr = 'is not AA or AAA compliant.';
+            } else if (compliance === 'AAA') {
+                var complianceStr = 'is AA compliant but is not AAA compliant.';
             }
+
+            var complianceHTML = 'This combination has a contrast ratio of <span class="code">' + output.ratio + ':1</span> and ' + complianceStr;
+            var textHTML = 'Given the background color of <span class="code">' + background + '</span>, the lightest text color you can use to remain AA compliant is ' + output.lightest + '.';
+            var backgroundHTML = 'Alternatively, you can keep the text color of <span class="code">' + text + '</span> and darken the background to <span class="code">' + output.darkest + '</span> and still remain compliant.';
+
+            document.getElementById('output-compliance').innerHTML = complicanceHTML;
+            document.getElementById('output-text').innerHTML = textHTML;
+            document.getElementById('output-background').innerHTML = backgroundHTML;
 
         }
 
